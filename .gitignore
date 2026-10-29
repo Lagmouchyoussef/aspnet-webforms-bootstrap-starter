@@ -1,0 +1,21 @@
+# Build output
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# NuGet (restored automatically from packages.config)
+packages/
+*.nupkg
+
+# IIS Express / local session state
+session-state/
+
+# OS files
+Thumbs.db
+.DS_Store

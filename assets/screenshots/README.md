@@ -1,37 +1,55 @@
-# 📸 Screenshot & GIF Checklist
+# 📸 Screenshot Inventory
 
-The main `README.md` references the image files listed below. They are **not included in this
-repository** (this environment cannot drive Visual Studio's GUI or a browser to capture them).
-Follow this checklist to produce them yourself — it only takes a few minutes — then drop each
-file at the exact path shown. GitHub will pick them up automatically since the README already
-points at these paths.
+Status of every image referenced by the main `README.md`.
 
-**Recommended tools:** [ScreenToGif](https://www.screentogif.com/) (Windows, free, screenshots *and* GIFs) or the Win+Shift+S Snipping Tool for stills.
+## ✅ Already in this repo (real captures)
 
-**Recommended size:** keep screenshots ≤ 1600 px wide and compress GIFs (ScreenToGif's built-in
-optimizer or [ezgif.com](https://ezgif.com/)) so the README stays fast to load.
-
-| # | File to create | What to capture |
+| File | Source | What it shows |
 |---|---|---|
-| 1 | `assets/screenshots/step-01-vs-installer-workload.png` | Visual Studio Installer, **ASP.NET and web development** workload checked |
-| 2 | `assets/screenshots/step-02-new-project-search.png` | *Create a new project* dialog, search box filled with `ASP.NET Web Application` |
-| 3 | `assets/screenshots/step-03-configure-project.png` | *Configure your new project* dialog (name/location/solution name) |
-| 4 | `assets/screenshots/step-04-webforms-template.png` | *Create a new ASP.NET Web Application* wizard with **Web Forms** selected |
-| 5 | `assets/screenshots/step-05-solution-explorer.png` | Solution Explorer showing the freshly generated project tree |
-| 6 | `assets/screenshots/step-06-nuget-manage-packages.png` | *Manage NuGet Packages for Solution* window, Browse tab |
-| 7 | `assets/screenshots/step-07-nuget-bootstrap-install.png` | Bootstrap package selected (`5.3.8`) with the **Install** button visible |
-| 8 | `assets/screenshots/step-08-content-scripts-folders.png` | Solution Explorer with `Content/` and `Scripts/` expanded after install |
-| 9 | `assets/screenshots/step-09-sitemaster-markup.png` | `Site1.Master` open in the editor, navbar markup visible |
-| 10 | `assets/screenshots/step-10-default-aspx-markup.png` | `Default.aspx` open in the editor |
-| 11 | `assets/screenshots/step-11-add-web-form-dialog.png` | *Add New Item* → *Web Form* dialog, name set to `webForm1.aspx` |
-| 12 | `assets/screenshots/step-12-set-as-start-page.png` | Solution Explorer context menu with **Set as Start Page** highlighted |
-| 13 | `assets/screenshots/step-13-run-iis-express.png` | Visual Studio toolbar with the green ▶ **IIS Express** run button visible |
-| 14 | `assets/screenshots/step-14-browser-home.png` | Running site — `Default.aspx` in the browser, desktop width |
-| 15 | `assets/screenshots/step-15-browser-navbar-collapsed.png` | Running site — browser narrowed to show the collapsed Bootstrap navbar (hamburger icon) |
-| 16 | `assets/screenshots/step-16-browser-webform1.png` | Running site — `webForm1.aspx` page (the "Contacts" link) |
-| 17 | `assets/screenshots/step-17-debug-breakpoint.png` | Breakpoint hit in `Site1.master.cs` → `Page_Load`, yellow debug arrow visible |
-| 18 | `assets/screenshots/step-18-release-build-output.png` | *Output* window after **Build Solution** in `Release` configuration, "Build succeeded" |
-| 19 | `assets/screenshots/step-19-git-push.png` | Terminal/PowerShell showing `git push` succeeding against GitHub |
-| 20 | `assets/demo.gif` | Short screen recording: launch (F5) → home page loads → resize window to show responsive navbar → click **Contacts** → close |
+| `step-01-new-project-template.png` | EMSI workshop *"02 - Bootstrap ASP.NET 2022"* | *Create a new project* → `ASP.NET Web Application (.NET Framework)` template card |
+| `step-02-create-webapp-empty-webforms.png` | same workshop | *Create an ASP.NET Web Application* wizard, **Vide/Empty** + **Web Forms** checked, project named `WebApplicationBootEMSI` |
+| `step-03-solution-explorer-empty.png` | same workshop | Solution Explorer right after project creation (minimal — no pages yet) |
+| `step-04-add-master-page.png` | same workshop | *Add New Item* → **Web Forms Master Page**, named `Site1.Master` |
+| `step-05-nuget-bootstrap-install.png` | same workshop | NuGet Package Manager, Browse tab, `bootstrap 5.3.8`, Install button |
+| `step-06-solution-explorer-after-bootstrap.png` | same workshop | Solution Explorer with `Content/` and `Scripts/` added after install |
+| `step-07-master-page-design-view.png` | same workshop | `Site1.Master` in Design view, navbar links visible |
+| `step-08-add-web-form-with-master.png` | same workshop | *Add New Item* → **Web Form with Master Page** |
+| `step-09-select-master-page-dialog.png` | same workshop | *Select a Master Page* dialog, `Site1.Master` chosen |
+| `step-10-content-page-design-view.png` | same workshop | Content page Design view merged with the Master Page |
+| `step-14-browser-home.png` | **this repo, live** | `Default.aspx` rendered at desktop width (1280×900), via MSBuild + IIS Express + headless Chrome |
+| `step-15-browser-navbar-collapsed.png` | **this repo, live** | `Default.aspx` at mobile width (390×844), navbar collapsed — captured over the Chrome DevTools Protocol |
+| `step-15b-browser-navbar-open.png` | **this repo, live** | Same page, after an actual click on `.navbar-toggler` — menu open |
+| `step-16-browser-webform1.png` | **this repo, live** | `webForm1.aspx` rendered at desktop width |
+| `../demo-strip.png` | **this repo, live** | 4-panel composite of the four screenshots above |
 
-Once the files are in place, delete this checklist file (or keep it for the next contributor).
+The "live" captures were produced with:
+
+```powershell
+# Build
+& "C:\Program Files\Microsoft Visual Studio\18\Insiders\MSBuild\Current\Bin\amd64\MSBuild.exe" `
+  WebApplicationBootEMSI.csproj /p:Configuration=Debug
+
+# Serve
+& "C:\Program Files\IIS Express\iisexpress.exe" /path:"<project folder>" /port:52345
+
+# Render + screenshot (headless Chrome, isolated temp profile, driven over CDP WebSocket)
+& "C:\Program Files\Google\Chrome\Application\chrome.exe" --headless=new --remote-debugging-port=9477 ...
+```
+
+## ⏳ Not included — need a live, interactive desktop session
+
+These four require actually clicking through a running Visual Studio instance on a real screen
+(installer UI, a paused debugger, a build output pane, a terminal mid-`git push`). No automation
+available in this environment can safely drive another app's GUI without taking over your actual
+desktop session, so they were intentionally skipped rather than faked.
+
+| # | File to add | What to capture |
+|---|---|---|
+| 1 | `step-vs-installer-workload.png` | Visual Studio Installer, **ASP.NET and web development** workload checked |
+| 2 | `step-debug-breakpoint.png` | Breakpoint hit in `Site1.master.cs` → `Page_Load`, yellow debug arrow visible |
+| 3 | `step-release-build-output.png` | *Output* window after **Build Solution** in `Release` configuration, "Build succeeded" |
+| 4 | `step-git-push.png` | Terminal/PowerShell showing `git push` succeeding against GitHub |
+
+**Recommended tools:** [ScreenToGif](https://www.screentogif.com/) or Win+Shift+S for stills.
+Drop each file at the path above and it's already wired into the "Part H" section of the main
+README (add an image reference there once captured).

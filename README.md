@@ -22,11 +22,13 @@ never opened Visual Studio before.* 🎓
 ## 🎬 Demo
 
 <div align="center">
-  <img src="assets/demo.gif" alt="Demo: running the site, resizing the responsive navbar, navigating to the Contacts page" width="800"/>
+  <img src="assets/demo-strip.png" alt="Four real captures of the running site: desktop home, collapsed mobile navbar, opened mobile navbar, and the desktop Contacts page" width="900"/>
 </div>
 
-> 🖼️ The GIF above is a placeholder path. See [`assets/screenshots/README.md`](assets/screenshots/README.md)
-> for the exact checklist of captures to record — drop them in and this demo comes alive.
+> 🖼️ These four panels are **real captures of this exact repository**, taken by building the
+> project with MSBuild, serving it with IIS Express, and rendering it in headless Chrome driven
+> over the DevTools protocol (including an actual click on the hamburger button for the "menu
+> open" panel). No mockups.
 
 ---
 
@@ -61,7 +63,8 @@ never opened Visual Studio before.* 🎓
 - ⚙️ **Classic ASP.NET Web Forms pipeline** on **.NET Framework 4.8.1**, run locally with
   **IIS Express** — exactly what you'll meet in most legacy enterprise ASP.NET codebases.
 - 📚 **A full "from zero" learning path** below — every click a beginner needs in Visual Studio,
-  in order, with a screenshot slot for each one.
+  in order, with a real screenshot for nearly every step (sourced from the EMSI workshop this
+  project follows, plus live captures of this repo actually running).
 
 ---
 
@@ -232,6 +235,9 @@ WebApplicationBootEMSI/
 
 ## 🚀 Quick Start (clone this repo)
 
+This repository contains the **full, real project** — not just documentation. Cloning it gives
+you the exact same `WebApplicationBootEMSI` solution described throughout this README.
+
 ```powershell
 # 1. Clone the repository
 git clone https://github.com/Lagmouchyoussef/aspnet-webforms-bootstrap-starter.git
@@ -241,241 +247,242 @@ cd aspnet-webforms-bootstrap-starter
 start WebApplicationBootEMSI.slnx
 ```
 
-1. Visual Studio restores NuGet packages automatically on load (or right-click the solution →
-   **Restore NuGet Packages** if prompted).
+1. Visual Studio restores the NuGet packages listed in `packages.config` automatically on load
+   (or right-click the solution → **Restore NuGet Packages** if prompted). This recreates the
+   `packages/` folder (bootstrap 5.3.8 + the Roslyn compiler provider) that isn't committed to
+   Git.
 2. Make sure `Default.aspx` is the start page (right-click it in Solution Explorer → **Set as
    Start Page**).
 3. Press **F5** (Debug) or **Ctrl+F5** (without debugging). IIS Express launches and your
    default browser opens the home page automatically. 🎉
 
-If you only have this README and want the *whole* project built from scratch yourself —
-including every Visual Studio click — follow the full tutorial below. 👇
+You can also build it headlessly from a terminal, exactly as was done to produce the screenshots
+in this README:
+
+```powershell
+& "C:\Program Files\Microsoft Visual Studio\18\Insiders\MSBuild\Current\Bin\amd64\MSBuild.exe" `
+  "WebApplicationBootEMSI.csproj" /p:Configuration=Debug
+
+& "C:\Program Files\IIS Express\iisexpress.exe" /path:"$PWD" /port:52345
+# then open http://localhost:52345/Default.aspx
+```
+
+> 💡 Adjust the `MSBuild.exe` path above to match your own Visual Studio edition/year — the
+> folder segment (`18\Insiders`, `2022\Community`, …) differs per install.
+
+If you only have this README and want to understand *how the whole project was built from
+scratch*, including every Visual Studio click, follow the full tutorial below. 👇
 
 ---
 
 ## 🎓 Full Beginner Tutorial — Build This Project From Absolute Zero
 
-This section assumes **zero prior experience** with Visual Studio or ASP.NET. Every step tells
-you exactly where to click. Each step has a screenshot slot — see
-[`assets/screenshots/README.md`](assets/screenshots/README.md) for the full capture checklist
-and exact filenames.
+This section assumes **zero prior experience** with Visual Studio or ASP.NET. It documents the
+*exact* sequence used to build **this repository**, based on the EMSI workshops
+**"02 - Bootstrap ASP.NET 2022"** and **"04 - UI Design with Bootstrap"**. Every IDE screenshot
+below (steps 1–10) is a **real capture from that workshop**, taken while building this very
+project (`WebApplicationBootEMSI`) — not a stock image. Steps 11+ are **real captures of this
+repository actually running**, produced by building it with MSBuild and serving it with IIS
+Express (see [`assets/screenshots/README.md`](assets/screenshots/README.md) for how the handful
+of remaining IDE-interaction screenshots — installer, breakpoint, Release build output, git push
+— can be added; they require live desktop access this environment doesn't have).
 
 ### Part A — Install your tools
 
-**Step 1. Install Visual Studio**
-Download Visual Studio (2022, or 2026 Insiders if you want the latest preview) from
-[visualstudio.microsoft.com](https://visualstudio.microsoft.com/). Run the installer.
-
-**Step 2. Select the right workload**
-In the Visual Studio Installer, check **☑️ ASP.NET and web development**, then click
-**Install** (or **Modify** if Visual Studio is already installed). This single workload pulls
-in the Web Forms templates, IIS Express, and NuGet support you'll use in every step below.
-
-📸 `step-01-vs-installer-workload.png`
+Download **Visual Studio** (2022, or 2026 Insiders — this repo was built with **Visual Studio
+2026 Insiders**, `devenv.exe` under `...\Microsoft Visual Studio\18\Insiders\`) from
+[visualstudio.microsoft.com](https://visualstudio.microsoft.com/). In the Visual Studio
+Installer, check **☑️ ASP.NET and web development**, then **Install** (or **Modify** if already
+installed). This workload brings the Web Forms templates, IIS Express, and NuGet tooling used
+below.
 
 ---
 
-### Part B — Create the project
+### Part B — Create the project (Empty ASP.NET template + Web Forms references)
 
-**Step 3. Launch Visual Studio and start a new project**
-On the start screen, click **Create a new project**.
+**Step 1. New Project → search "ASP.NET"**
+On the Visual Studio start screen, click **Create a new project**, then search for
+`ASP.NET Web Application`. Pick **Application web ASP.NET (.NET Framework)**.
 
-**Step 4. Pick the Web Forms template**
-In the search box, type `ASP.NET Web Application`. Select **ASP.NET Web Application (.NET
-Framework)** — ⚠️ not "ASP.NET Core Web App" — and click **Next**.
+📸 ![New project template](assets/screenshots/step-01-new-project-template.png)
 
-📸 `step-02-new-project-search.png`
+**Step 2. Pick "Vide" (Empty) + check "Web Forms"**
+On the **Create an ASP.NET Web Application** screen, select the **Vide / Empty** template on the
+left (it starts with no pre-generated pages), then under *Add folders and core references* on
+the right, check **☑️ Web Forms**. Leave Authentication at **None**. This is deliberate: starting
+empty forces you to add the Master Page and Bootstrap yourself, rather than inheriting a
+prebuilt template — exactly what this workshop (and this repo) teaches.
 
-**Step 5. Name and locate the project**
-On the *Configure your new project* screen:
-- **Project name:** `WebApplicationBootEMSI` (or your own name)
-- **Location:** any folder you like
-- **Solution name:** leave it matching the project name
+📸 ![Empty template with Web Forms references](assets/screenshots/step-02-create-webapp-empty-webforms.png)
 
-Click **Create**.
+**Step 3. Look at Solution Explorer**
+The generated solution is intentionally minimal: `App_Data/`, `Models/`, `Global.asax`,
+`packages.config`, `Web.config` — no pages, no CSS yet.
 
-📸 `step-03-configure-project.png`
-
-**Step 6. Choose the "Web Forms" template**
-A second wizard appears asking which kind of ASP.NET project to scaffold. Select **Web Forms**
-(not Empty, MVC, or Web API) and click **Create**.
-
-📸 `step-04-webforms-template.png`
-
-**Step 7. Look around Solution Explorer**
-Visual Studio generates a starter solution with `Default.aspx`, `Site.Master`, `Web.config`,
-`App_Data/`, `Scripts/`, `Content/`, etc. Take a minute to open a few files and see what the
-default template looks like before you change anything.
-
-📸 `step-05-solution-explorer.png`
+📸 ![Solution Explorer right after creation](assets/screenshots/step-03-solution-explorer-empty.png)
 
 ---
 
-### Part C — Install Bootstrap (the NuGet way)
+### Part C — Create the Master Page
 
-**Step 8. Open the NuGet Package Manager**
-Go to **Tools → NuGet Package Manager → Manage NuGet Packages for Solution…**
+**Step 4. Add → New Item → Web Forms Master Page**
+Right-click the project → **Add → New Item…**, open the **Web** category, select **Page maître
+Web Forms / Web Forms Master Page**, name it `Site1.Master`, and click **Add**.
 
-📸 `step-06-nuget-manage-packages.png`
+📸 ![Add New Item — Master Page](assets/screenshots/step-04-add-master-page.png)
 
-**Step 9. Search and install Bootstrap**
-Click the **Browse** tab, type `bootstrap`, select the official **bootstrap** package by the
-Bootstrap team, pick version **5.3.8** (or latest 5.x) in the version dropdown on the right,
-check your project, and click **Install**. Accept the license prompt.
-
-📸 `step-07-nuget-bootstrap-install.png`
-
-**Step 10. Confirm the files landed**
-Expand `Content/` and `Scripts/` in Solution Explorer — you should now see `bootstrap.min.css`,
-`bootstrap.css`, the RTL and grid/utilities variants, and `bootstrap.bundle.min.js` under
-`Scripts/`. Open `packages.config` and confirm a `<package id="bootstrap" version="5.3.8" .../>`
-entry was added automatically.
-
-📸 `step-08-content-scripts-folders.png`
+> In ASP.NET Web Forms, a **Master Page** defines the layout shared by every page — header,
+> navigation, `<head>` — once. Individual **content pages** then plug their own markup into a
+> `ContentPlaceHolder` the Master Page exposes, and ASP.NET merges the two at request time.
 
 ---
 
-### Part D — Build the shared layout (Master Page)
+### Part D — Install Bootstrap via NuGet
 
-**Step 11. Open the Master Page**
-Double-click `Site1.Master` (Visual Studio names it `Site1.Master` or `Site.Master` depending
-on the template version).
+**Step 5. Manage NuGet Packages → search "bootstrap" → Install**
+Right-click the project → **Manage NuGet Packages…**, open the **Parcourir / Browse** tab,
+search `bootstrap`, select the official **bootstrap** package (publisher `mdo, Supergibbs,
+twbs`), pick version **5.3.8** from the version dropdown, and click **Install**. Accept the
+license prompt.
 
-**Step 12. Link Bootstrap in `<head>`**
-Inside the `<head runat="server">` block, add:
+📸 ![NuGet Package Manager — installing Bootstrap 5.3.8](assets/screenshots/step-05-nuget-bootstrap-install.png)
+
+**Step 6. Confirm the generated folders**
+Two new folders appear: **`Content/`** (Bootstrap's CSS) and **`Scripts/`** (Bootstrap's JS
+bundle). `packages.config` now lists `bootstrap 5.3.8` automatically.
+
+📸 ![Solution Explorer after Bootstrap install](assets/screenshots/step-06-solution-explorer-after-bootstrap.png)
+
+---
+
+### Part E — Build the shared layout
+
+**Step 7. Link Bootstrap and build the navbar in `Site1.Master`**
+Open `Site1.Master` and, inside `<head runat="server">`, reference the stylesheet:
 
 ```aspx
 <link href="<%= ResolveUrl("~/Content/bootstrap.min.css") %>" rel="stylesheet" />
 ```
 
-**Step 13. Build a responsive navbar**
-Inside `<form id="form1" runat="server">`, above the `<asp:ContentPlaceHolder>`, paste a
-Bootstrap navbar — a `<nav class="navbar navbar-expand-md navbar-light bg-light py-2">`
-containing a brand link, a `navbar-toggler` button (the mobile hamburger), and a
-`collapse navbar-collapse` list of `<a class="nav-link">` items pointing at your pages.
-
-**Step 14. Load the Bootstrap JS bundle**
-Just before `</body>`, add:
+Inside `<form id="form1" runat="server">`, above the `<asp:ContentPlaceHolder>`, add a
+responsive Bootstrap navbar (`navbar navbar-expand-md navbar-light bg-light`) with a brand link,
+a `navbar-toggler` button, and a `collapse navbar-collapse` list of nav links. Just before
+`</body>`, load the JS bundle:
 
 ```aspx
 <script src="<%= ResolveUrl("~/Scripts/bootstrap.bundle.min.js") %>"></script>
 ```
 
-This single bundle powers the navbar's collapse/hamburger behavior — no jQuery required.
+This single bundle (no jQuery needed) powers the navbar's collapse/hamburger behavior. The
+Design view confirms the navbar renders above the empty content area:
 
-📸 `step-09-sitemaster-markup.png`
+📸 ![Site1.Master Design view with the navbar links](assets/screenshots/step-07-master-page-design-view.png)
 
----
-
-### Part E — Build the content pages
-
-**Step 15. Fill in the home page**
-Open `Default.aspx`. Inside the existing `<asp:Content ContentPlaceHolderID="ContentPlaceHolder1">`,
-lay out your content with Bootstrap's grid: a `container`, a `row`, and `col-*` articles/sections.
-
-📸 `step-10-default-aspx-markup.png`
-
-**Step 16. Add a second page**
-Right-click the project in Solution Explorer → **Add → New Item… → Web Form**. Name it
-`webForm1.aspx` and click **Add**.
-
-📸 `step-11-add-web-form-dialog.png`
-
-**Step 17. Wire it to the Master Page**
-Make sure the generated `@Page` directive includes `MasterPageFile="~/Site1.Master"`, then fill
-its `<asp:Content>` with a second Bootstrap layout (e.g. a `row g-4` of bordered cards).
-
-**Step 18. Link it from the navbar**
-Back in `Site1.Master`, add a nav item pointing at
-`<%= ResolveUrl("~/webForm1.aspx") %>` so users can reach the new page.
+*(This is exactly the markup in [`Site1.Master`](Site1.Master) in this repo — navbar links
+renamed to **Products / Organizations / Offers / Contacts**.)*
 
 ---
 
-### Part F — Run and debug
+### Part F — Create the content pages
 
-**Step 19. Set the start page**
-Right-click `Default.aspx` in Solution Explorer → **Set as Start Page**.
+**Step 8. Add → New Item → Web Form *with* Master Page**
+Right-click the project → **Add → New Item…** → **Web Form avec page maître / Web Form with
+Master Page**. Name it (this repo uses `Default.aspx` for the home page, and later
+`webForm1.aspx` for a second page).
 
-📸 `step-12-set-as-start-page.png`
+📸 ![Add New Item — Web Form with Master Page](assets/screenshots/step-08-add-web-form-with-master.png)
 
-**Step 20. Press F5**
-Click the green ▶ **IIS Express** button (or press **F5**). Visual Studio compiles the project,
-starts IIS Express, and opens your default browser automatically.
+**Step 9. Pick the Master Page**
+A second dialog asks which Master Page to bind to. Select **Site1.Master** → **OK**.
 
-📸 `step-13-run-iis-express.png`
+📸 ![Select a Master Page dialog](assets/screenshots/step-09-select-master-page-dialog.png)
 
-**Step 21. Check the result**
-Your home page should load with the Bootstrap navbar at full width.
+**Step 10. Fill the content page**
+Visual Studio scaffolds the `@Page` directive with `MasterPageFile="~/Site1.Master"` and an
+empty `<asp:Content ContentPlaceHolderID="ContentPlaceHolder1">`. Switch to **Design** view to
+confirm the navbar now wraps your new page:
 
-📸 `step-14-browser-home.png`
+📸 ![Content page Design view, merged with the Master Page](assets/screenshots/step-10-content-page-design-view.png)
 
-**Step 22. Test responsiveness**
-Shrink the browser window (or open DevTools' device toolbar, `Ctrl+Shift+M`). Below the `md`
-breakpoint, the nav links collapse behind a ☰ hamburger button — click it to confirm the
-collapse animation works.
-
-📸 `step-15-browser-navbar-collapsed.png`
-
-**Step 23. Navigate to the second page**
-Click the **Contacts** link (or whatever you named it) and confirm `webForm1.aspx` renders
-through the same Master Page.
-
-📸 `step-16-browser-webform1.png`
-
-**Step 24. Set a breakpoint and debug**
-Open `Site1.Master.cs`, click in the gutter next to `Page_Load` to set a breakpoint (**F9**),
-then press **F5** again. Visual Studio pauses execution there on every request — inspect
-variables, step through code with **F10**/**F11**.
-
-📸 `step-17-debug-breakpoint.png`
+Fill the content with Bootstrap's 12-column grid — a `container`, a `row`, and `col-*` articles
+(`col-12 col-md-6`, `col-md-4`, `col-md-2`, …). Repeat this step for a second page
+(`webForm1.aspx` in this repo) and link both pages from the navbar in `Site1.Master` using
+`<%= ResolveUrl("~/PageName.aspx") %>`.
 
 ---
 
-### Part G — Build for Release and ship it
+### Part G — Run it and see the real result
 
-**Step 25. Switch to Release configuration**
-In the toolbar dropdown, change **Debug** to **Release**.
+**Step 11. Set the start page, then press F5**
+Right-click `Default.aspx` → **Set as Start Page**, then press **F5** (or **Ctrl+F5**). Visual
+Studio builds the project, launches **IIS Express**, and opens your default browser.
 
-**Step 26. Build the solution**
-**Build → Build Solution** (or **Ctrl+Shift+B**). Watch the *Output* window for
-`Build succeeded`.
+The screenshots below are **real captures of this repository** — built with MSBuild and served
+by IIS Express exactly as F5 would do it:
 
-📸 `step-18-release-build-output.png`
+| Desktop | Mobile — collapsed | Mobile — menu open |
+|---|---|---|
+| ![Home desktop](assets/screenshots/step-14-browser-home.png) | ![Mobile collapsed](assets/screenshots/step-15-browser-navbar-collapsed.png) | ![Mobile menu open](assets/screenshots/step-15b-browser-navbar-open.png) |
 
-**Step 27. Publish (optional)**
-Right-click the project → **Publish…** to deploy to IIS, Azure App Service, or a folder, using
-the `Web.Release.config` transform automatically.
+**Step 12. Navigate to the second page**
+Click **Contacts** in the navbar to confirm `webForm1.aspx` renders through the same Master
+Page, with its own Bootstrap grid of cards:
+
+📸 ![Contacts page](assets/screenshots/step-16-browser-webform1.png)
 
 ---
 
-### Part H — Save your work with Git
+### Part H — Debug, build for Release, and ship it
 
-**Step 28. Initialize and push**
+These last steps need an interactive Visual Studio session to capture, so no screenshot is
+attached yet — see [`assets/screenshots/README.md`](assets/screenshots/README.md) if you want to
+add your own.
 
-```powershell
-git init
-git add .
-git commit -m "Initial commit: ASP.NET Web Forms + Bootstrap starter"
-git branch -M main
-git remote add origin https://github.com/<your-username>/<your-repo>.git
-git push -u origin main
-```
+- **Debug:** open `Site1.Master.cs`, click the gutter next to `Page_Load` to set a breakpoint
+  (**F9**), then **F5** again — Visual Studio pauses there on every request.
+- **Release build:** switch the toolbar's configuration dropdown from **Debug** to **Release**,
+  then **Build → Build Solution** (**Ctrl+Shift+B**); watch the *Output* window for
+  `Build succeeded`.
+- **Publish:** right-click the project → **Publish…** to deploy to IIS, Azure App Service, or a
+  folder, applying the `Web.Release.config` transform automatically.
+- **Push to GitHub:**
+  ```powershell
+  git init
+  git add .
+  git commit -m "Initial commit: ASP.NET Web Forms + Bootstrap starter"
+  git branch -M main
+  git remote add origin https://github.com/<your-username>/<your-repo>.git
+  git push -u origin main
+  ```
 
-📸 `step-19-git-push.png`
-
-🎉 **Congratulations — you just built, ran, debugged, and published a professional ASP.NET Web
-Forms + Bootstrap project from a completely empty Visual Studio install.**
+🎉 **Congratulations — you just built, ran, and understood a professional ASP.NET Web Forms +
+Bootstrap project from a completely empty Visual Studio install.**
 
 ---
 
 ## 🖥️ Screenshots
 
-| Home page (desktop) | Navbar collapsed (mobile) | Contacts page |
-|---|---|---|
-| ![Home page](assets/screenshots/step-14-browser-home.png) | ![Collapsed navbar](assets/screenshots/step-15-browser-navbar-collapsed.png) | ![Contacts page](assets/screenshots/step-16-browser-webform1.png) |
+All screenshots in this README are real — either captured from this exact repository running
+locally, or sourced from the EMSI workshop this project was built from. None are stock images or
+mockups.
 
-> See [`assets/screenshots/README.md`](assets/screenshots/README.md) for the full capture
-> checklist referenced throughout this README.
+**App running (this repo, live-rendered):**
+
+| Home — desktop | Home — mobile (collapsed) | Home — mobile (menu open) | Contacts — desktop |
+|---|---|---|---|
+| ![Home page desktop](assets/screenshots/step-14-browser-home.png) | ![Collapsed navbar](assets/screenshots/step-15-browser-navbar-collapsed.png) | ![Opened mobile menu](assets/screenshots/step-15b-browser-navbar-open.png) | ![Contacts page](assets/screenshots/step-16-browser-webform1.png) |
+
+**Visual Studio, building this project (from the EMSI workshop):**
+
+| New project | Empty + Web Forms | NuGet → Bootstrap | Add New Item → Web Form w/ Master |
+|---|---|---|---|
+| ![New project template](assets/screenshots/step-01-new-project-template.png) | ![Empty template](assets/screenshots/step-02-create-webapp-empty-webforms.png) | ![NuGet Bootstrap install](assets/screenshots/step-05-nuget-bootstrap-install.png) | ![Add Web Form with Master Page](assets/screenshots/step-08-add-web-form-with-master.png) |
+
+> See the [full tutorial](#-full-beginner-tutorial--build-this-project-from-absolute-zero) above
+> for all 10 IDE screenshots in sequence, and
+> [`assets/screenshots/README.md`](assets/screenshots/README.md) for the few remaining
+> interactive-only captures (installer, breakpoint debug, Release build output, git push) that
+> still need a live desktop session to record.
 
 ---
 
@@ -497,7 +504,8 @@ Forms + Bootstrap project from a completely empty Visual Studio install.**
 - [ ] Move to a modern layout (`master` → ASP.NET Core Razor Pages) as a side-by-side learning comparison
 - [ ] Add a sample `Models/` entity + a data-bound `GridView`/`Repeater` page
 - [ ] Add automated UI smoke tests (e.g. Playwright) against IIS Express
-- [ ] Record and commit the real screenshots/GIF from the checklist above
+- [ ] Capture the 4 remaining interactive-only screenshots (installer, breakpoint, Release build
+      output, git push) listed in [`assets/screenshots/README.md`](assets/screenshots/README.md)
 
 ---
 
@@ -523,7 +531,10 @@ This project is licensed under the **MIT License** — see [`LICENSE`](LICENSE) 
 
 - [Bootstrap](https://getbootstrap.com/) for the responsive component library
 - [Microsoft Learn — ASP.NET Web Forms](https://learn.microsoft.com/aspnet/web-forms/overview/) documentation
-- EMSI — *4IIR G9/G92* ASP.NET coursework that this starter was built for 🎓
+- EMSI — *4IIR G9/G92* ASP.NET coursework. The step-by-step tutorial above follows the workshops
+  **"02 - Bootstrap ASP.NET 2022"** and **"04 - UI Design with Bootstrap"**, whose Visual Studio
+  screenshots (steps 1–10) are reproduced here as the authoritative reference for this exact
+  project 🎓
 
 <div align="center">
 

@@ -1,0 +1,33 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site1.master.cs" Inherits="WebApplicationBootEMSI.Site1" %>
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bootstrap ASP.NET Website</title>
+    <link href="<%= ResolveUrl("~/Content/bootstrap.min.css") %>" rel="stylesheet" />
+</head>
+<body>
+    <form id="form1" runat="server">
+        <nav class="navbar navbar-expand-md navbar-light bg-light py-2">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="<%= ResolveUrl("~/Default.aspx") %>">Home</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#siteNavigation" aria-controls="siteNavigation" aria-expanded="false" aria-label="Open navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="siteNavigation">
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a class="nav-link" href="<%= ResolveUrl("~/Default.aspx#emsi") %>">Products</a></li>
+                        <li class="nav-item"><a class="nav-link" href="<%= ResolveUrl("~/Default.aspx#about") %>">Organizations</a></li>
+                        <li class="nav-item"><a class="nav-link" href="<%= ResolveUrl("~/Default.aspx#contact") %>">Offers</a></li>
+                        <li class="nav-item"><a class="nav-link" href="<%= ResolveUrl("~/webForm1.aspx") %>">Contacts</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        </asp:ContentPlaceHolder>
+    </form>
+    <script src="<%= ResolveUrl("~/Scripts/bootstrap.bundle.min.js") %>"></script>
+</body>
+</html>
