@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" width="640" height="160" role="img" aria-labelledby="title desc">
+  <title id="title">WebApplicationBootEMSI logo</title>
+  <desc id="desc">Rounded gradient mark with a code bracket and layers glyph, next to the project wordmark.</desc>
+  <defs>
+    <linearGradient id="markGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6f3cf2"/>
+      <stop offset="100%" stop-color="#2d1b8c"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#9f7bff"/>
+      <stop offset="100%" stop-color="#7952b3"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="8" y="8" width="144" height="144" rx="28" fill="url(#markGrad)"/>
+
+  <path d="M55 52 L34 80 L55 108" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M105 52 L126 80 L105 108" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="68" y="98" width="24" height="7" rx="3.5" fill="url(#accentGrad)"/>
+  <rect x="68" y="110" width="24" height="7" rx="3.5" fill="url(#accentGrad)" opacity="0.75"/>
+  <rect x="68" y="122" width="24" height="7" rx="3.5" fill="url(#accentGrad)" opacity="0.5"/>
+
+  <text x="176" y="78" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="40" font-weight="700" fill="#2b2140">WebApplicationBootEMSI</text>
+  <text x="176" y="112" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#6f6680">ASP.NET Web Forms &#215; Bootstrap 5 Starter</text>
+</svg>
